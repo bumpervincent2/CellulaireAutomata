@@ -1,0 +1,5 @@
+class twee_dimensionaal(cellulaire_automata):
+    
+    def __init__(self, hoogte, breedte):
+        self.hoogte = hoogte
+        self.breedte = breedte
