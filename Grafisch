@@ -1,4 +1,0 @@
-    def grafisch(self):
-        import matplotlib.pyplot as plt
-        plt.figure(figsize=(10,6))
-        plt.imshow(self.buren(self.begin), cmap='hot')
