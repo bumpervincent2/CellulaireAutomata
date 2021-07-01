@@ -1,0 +1,109 @@
+
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+class cellulaire_automata:
+    def __init__(self, hoogte, breedte, begin):
+        self.hoogte = hoogte
+        self.breedte = breedte
+        self.begin = begin
+    
+    def __str__(self):
+        return str(self.maak_rooster(self.begin))
+    
+    def maak_rooster(self, begin):
+        import math
+        rooster = [[0]*self.breedte]*self.hoogte
+        lijst1 = [0]*math.ceil((self.breedte-3)/2)
+        lijst2 = [0]*math.floor((self.breedte-3)/2)
+        rooster[0] = lijst1+begin+lijst2
+        return rooster
+    
+    def maak_willekeurig_rooster(self):
+        rooster = np.random.choice([1, 0], self.breedte*self.hoogte, p=[0.2, 0.8]).reshape(self.breedte, self.hoogte)
+        return rooster
+    def evolueer():
+        pass
+    
+    def __repr__(self):
+        return f'CA: hoogte ={self.hoogte}, breedte = {self.breedte}, begin = {self.begin}'
+
+class een_dimensionaal(cellulaire_automata):
+    
+    def __init__(self, hoogte, breedte, begin, lijst0, lijst1):
+        self.hoogte = hoogte
+        self.breedte = breedte
+        self.begin = begin
+        self.lijst0 = lijst0
+        self.lijst1 = lijst1
+        
+    def buren(self, begin):
+        burenlijst = []
+        rooster = super().maak_rooster(begin)
+        lijsta = [rooster[0]]
+        for i in range(1, self.hoogte):
+            for j in range(0,self.breedte):
+                burenlijst.append([rooster[i-1][(j-1)%self.breedte], rooster[i-1][j%self.breedte], rooster[i-1][(j+1)%self.breedte]])
+            rooster[i] = self.evolueren(burenlijst)
+            length = self.breedte + 2
+            rooster[i] = rooster[i][:length]
+            lijsta.append(rooster[i])
+            burenlijst.clear()
+        return lijsta
+
+    def evolueren(self, burenlijst):
+        regel = []
+        lijst_0 = [i for i in self.lijst0]
+        lijst_1 = [i for i in self.lijst1]
+        for lijst in burenlijst:
+            if lijst in lijst_0:
+                regel.append(0)
+            elif lijst in lijst_1:
+                regel.append(1)
+        return regel
+    
+    def grafisch(self):
+        plt.figure(figsize=(10,6))
+        plt.imshow(self.buren(self.begin), cmap='hot')
+    def __str__(self):
+        return '\n'.join([str(stuff) for stuff in self.buren(self.begin)])
+    
+    def __repr__(self):
+        return f'1d: lijst0={self.lijst0}, lijst1={self.lijst1}, {super().__repr__()}'
+    
+class twee_dimensionaal(cellulaire_automata):
+    
+    def __init__(self, hoogte, breedte):
+        self.hoogte = hoogte
+        self.breedte = breedte
+        
+    def __str__(self):
+        return str(self.evolueer(super().maak_willekeurig_rooster()))
+    
+    def evolueer(self):
+        rooster = super().maak_willekeurig_rooster()
+        nieuw_rooster = rooster.copy()
+        for i in range(self.hoogte):
+                for j in range(self.breedte):
+                    som = int(rooster[(i-1)%self.hoogte][(j-1)%self.breedte] + rooster[(i-1)%self.hoogte][j] +
+                                   rooster[(i-1)%self.hoogte][(j+1)%self.breedte] + rooster[i][(j+1)%self.breedte] +
+                                   rooster[(i+1)%self.hoogte][(j+1)%self.breedte] + rooster[(i+1)%self.hoogte][j] +
+                                   rooster[(i+1)%self.hoogte][(j-1)%self.breedte] + rooster[i][(j-1)%self.breedte])
+                    if rooster[i][j] == 1:
+                        if som < 2 or som > 3:
+                            nieuw_rooster[i][j] = 0
+                    else:
+                        if som == 3:
+                            nieuw_rooster[i][j] = 1
+        rooster[:] = nieuw_rooster[:]
+        return nieuw_rooster
+            
+
+    def grafisch(self):
+        plt.imshow(self.evolueer(), cmap='hot')
+        animation_1 = animation.FuncAnimation(plt.gcf(),self.evolueer(),interval=100)
+        plt.plot()
+
+ 
+b = twee_dimensionaal(50, 50)
+b.grafisch()
