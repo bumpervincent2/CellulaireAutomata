@@ -1,7 +1,0 @@
-    def maak_rooster(self, begin):
-        import math
-        rooster = [[0]*self.breedte]*self.hoogte
-        lijst1 = [0 for i in range(math.floor((self.breedte-3)/2))] 
-        lijst2 = [0 for i in range(math.ceil((self.breedte-3)/2))]
-        rooster[0] = lijst1+begin+lijst2
-        return rooster
