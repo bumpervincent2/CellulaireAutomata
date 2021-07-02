@@ -2,16 +2,65 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+
 class cellulaire_automata:
+    '''
+    
+    
+    '''
     def __init__(self, hoogte, breedte, begin):
+        '''
+        Omschrijving
+        ------------
+                
+        Parameters
+        ----------
+        hoogte : int
+            De hoogte van het rooster.
+        breedte : int
+            De breedte van het rooster.
+        begin : list
+            De beginsituatie voor een een-dimensionale CA.
+
+        Returns
+        -------
+        None.
+        
+        '''
         self.hoogte = hoogte
         self.breedte = breedte
         self.begin = begin
     
     def __str__(self):
+        '''
+        Omschrijving
+        ------------
+
+        Returns
+        -------
+        str
+            Returns een rooster opgebouwd met behulp van de hoogte, breedte en een begin-waarde.
+
+        '''
         return str(self.maak_rooster(self.begin))
     
     def maak_rooster(self, begin):
+        '''
+        Omschrijving
+        ------------
+                
+        Parameters
+        ----------
+        begin : list
+            De beginsituatie voor een-dimensionale CA.
+
+        Returns
+        -------
+        rooster : list
+            Lijst met lijsten die corresponderen met de kolommen van een rooster. 
+            Deze lijsten bevatten bovendien alleen eenen en nullen.
+
+        '''
         import math
         rooster = [[0]*self.breedte]*self.hoogte
         lijst1 = [0]*math.ceil((self.breedte-3)/2)
@@ -20,17 +69,62 @@ class cellulaire_automata:
         return rooster
     
     def maak_willekeurig_rooster(self):
+        '''
+        Omschrijving
+        ------------
+                
+        Returns
+        -------
+        rooster : ndarray
+            Rooster met willekeurige nullen en eenen, waarbij nullen een kans van 0.8 hebben en eenen een kans van 0.2 hebben om te ontstaan.
+
+        '''
         rooster = np.random.choice([1, 0], self.breedte*self.hoogte, p=[0.2, 0.8]).reshape(self.breedte, self.hoogte)
         return rooster
-    def evolueer():
-        pass
     
     def __repr__(self):
+        '''
+        Omschrijving
+        ------------
+                
+        Returns
+        -------
+        str
+            Geeft een beschrijving van de verschillende self-objecten.
+
+        '''
         return f'CA: hoogte ={self.hoogte}, breedte = {self.breedte}, begin = {self.begin}'
 
 class een_dimensionaal(cellulaire_automata):
+    '''
+    
+    
+    
+    '''
     
     def __init__(self, hoogte, breedte, begin, lijst0, lijst1):
+        '''
+        Omschrijving
+        ------------
+        
+        Parameters
+        ----------
+        hoogte : int
+            De hoogte van het rooster.
+        breedte : int
+            De breedte van het rooster.
+        begin : list
+            De beginsituatie voor een een-dimensionale CA.
+        lijst0 : list
+            Lijst van lijsten van alle combinaties van drie getallen, bestaand uit een of nul, die naar nul gaan na evolutie. 
+        lijst1 : list
+            Lijst van lijsten van alle combinaties van drie getallen, bestaand uit een of nul, die naar een gaan na evolutie.
+
+        Returns
+        -------
+        None.
+
+        '''
         self.hoogte = hoogte
         self.breedte = breedte
         self.begin = begin
@@ -38,6 +132,21 @@ class een_dimensionaal(cellulaire_automata):
         self.lijst1 = lijst1
         
     def buren(self, begin):
+        '''
+        Omschrijving
+        ------------
+        
+        Parameters
+        ----------
+        begin : list
+            De beginsituatie voor een een-dimensionale CA.
+
+        Returns
+        -------
+        lijsta : TYPE
+            DESCRIPTION.
+
+        '''
         burenlijst = []
         rooster = super().maak_rooster(begin)
         lijsta = [rooster[0]]
@@ -52,6 +161,21 @@ class een_dimensionaal(cellulaire_automata):
         return lijsta
 
     def evolueren(self, burenlijst):
+        '''
+        Omschrijving
+        ------------
+        
+        Parameters
+        ----------
+        burenlijst : list
+            Lijst van lijsten van alle buren van ieder element van een rij.
+
+        Returns
+        -------
+        regel : list
+            Lijst van eenen en nullen van de nieuwe rij.
+
+        '''
         regel = []
         lijst_0 = [i for i in self.lijst0]
         lijst_1 = [i for i in self.lijst1]
@@ -63,25 +187,95 @@ class een_dimensionaal(cellulaire_automata):
         return regel
     
     def grafisch(self):
+        '''
+        Omschrijving
+        ------------
+        Plot de lijst van lijsten, die de kolommen van het rooster zijn.
+        '''
         plt.figure(figsize=(10,6))
         plt.imshow(self.buren(self.begin), cmap='hot')
+        
     def __str__(self):
+        '''
+        Omschrijving
+        ------------
+        
+        Returns
+        -------
+        str
+            Verenigd alle rijen van het rooster en format dit zodat het een rooster wordt van juiste hoogte en breedte.
+
+        '''
         return '\n'.join([str(stuff) for stuff in self.buren(self.begin)])
     
     def __repr__(self):
+        '''
+        Omschrijving
+        ------------
+                
+        Returns
+        -------
+        str
+            Geeft een beschrijving van de verschillende self-objecten, 
+            deze worden afgeleidt van een eerdere __repr__ functie, en geeft een beschrijving van de lijst0- en lijst1-objecten.
+
+        '''
         return f'1d: lijst0={self.lijst0}, lijst1={self.lijst1}, {super().__repr__()}'
     
 class twee_dimensionaal(cellulaire_automata):
+    '''
     
+    
+    '''
     def __init__(self, hoogte, breedte):
+        '''
+        Omschrijving
+        ------------
+        
+        Parameters
+        ----------
+        hoogte : TYPE
+            DESCRIPTION.
+        breedte : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        None.
+
+        '''
         self.hoogte = hoogte
         self.breedte = breedte
         
     def __str__(self):
+        '''
+        Omschrijving
+        ------------
+        
+        Returns
+        -------
+        TYPE
+            DESCRIPTION.
+
+        '''
         return str(self.evolueer(super().maak_willekeurig_rooster()))
     
-    def evolueer(self):
-        rooster = super().maak_willekeurig_rooster()
+    def evolueer(self, rooster):
+        '''
+        Omschrijving
+        ------------
+
+        Parameters
+        ----------
+        rooster : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        nieuw_rooster : TYPE
+            DESCRIPTION.
+
+        '''
         nieuw_rooster = rooster.copy()
         for i in range(self.hoogte):
                 for j in range(self.breedte):
@@ -100,10 +294,20 @@ class twee_dimensionaal(cellulaire_automata):
             
 
     def grafisch(self):
-        plt.imshow(self.evolueer(), cmap='hot')
-        animation_1 = animation.FuncAnimation(plt.gcf(),self.evolueer(),interval=100)
+        '''
+        Omschrijving
+        ------------
+        
+        Returns
+        -------
+        None.
+
+        '''
+        plt.imshow(self.evolueer(super().maak_willekeurig_rooster()), cmap='hot')
+        animation_1 = animation.FuncAnimation(plt.gcf(),self.evolueer(super().maak_willekeurig_rooster()),interval=100)
         plt.plot()
 
  
 b = twee_dimensionaal(50, 50)
+a = een_dimensionaal(20, 60, [0,1,0], [[1, 1, 1], [1, 1, 0], [1, 0, 1], [0, 0, 0]], [[1, 0, 0], [0, 1, 1], [0, 1, 0], [0, 0, 1]])
 b.grafisch()
