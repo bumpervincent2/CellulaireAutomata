@@ -143,22 +143,20 @@ class een_dimensionaal(cellulaire_automata):
 
         Returns
         -------
-        lijsta : TYPE
+        lijst : TYPE
             DESCRIPTION.
 
         '''
         burenlijst = []
         rooster = super().maak_rooster(begin)
-        lijsta = [rooster[0]]
+        lijst = [rooster[0]]
         for i in range(1, self.hoogte):
             for j in range(0,self.breedte):
                 burenlijst.append([rooster[i-1][(j-1)%self.breedte], rooster[i-1][j%self.breedte], rooster[i-1][(j+1)%self.breedte]])
             rooster[i] = self.evolueren(burenlijst)
-            length = self.breedte + 2
-            rooster[i] = rooster[i][:length]
-            lijsta.append(rooster[i])
+            lijst.append(rooster[i])
             burenlijst.clear()
-        return lijsta
+        return lijst
 
     def evolueren(self, burenlijst):
         '''
@@ -177,12 +175,10 @@ class een_dimensionaal(cellulaire_automata):
 
         '''
         regel = []
-        lijst_0 = [i for i in self.lijst0]
-        lijst_1 = [i for i in self.lijst1]
         for lijst in burenlijst:
-            if lijst in lijst_0:
+            if lijst in self.lijst_0:
                 regel.append(0)
-            elif lijst in lijst_1:
+            elif lijst in self.lijst_1:
                 regel.append(1)
         return regel
     
