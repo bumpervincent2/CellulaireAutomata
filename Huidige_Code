@@ -5,14 +5,22 @@ import matplotlib.animation as animation
 
 class cellulaire_automata:
     '''
+    Omschrijving
+    ------------
+    Een klasse voor het maken van een rooster voor een willekeurige CA.
     
+    Parameters
+    ----------
+    hoogte: int
+        De hoogte van het rooster.
+    breedte: int
+        De breedte van het rooster.
+    begin: list
+        De beginsituatie voor een een-dimensionale CA.
     
     '''
     def __init__(self, hoogte, breedte, begin):
         '''
-        Omschrijving
-        ------------
-                
         Parameters
         ----------
         hoogte : int
@@ -35,7 +43,8 @@ class cellulaire_automata:
         '''
         Omschrijving
         ------------
-
+        Functie om te zorgen dat we een object in cellulaire_automata kunnen printen als rooster.
+        
         Returns
         -------
         str
@@ -48,7 +57,8 @@ class cellulaire_automata:
         '''
         Omschrijving
         ------------
-                
+        Functie die een rooster maakt van alleen nullen, behalve bij de eerste rij. Deze is gevuld met nullen en de input van begin.
+        
         Parameters
         ----------
         begin : list
@@ -72,7 +82,8 @@ class cellulaire_automata:
         '''
         Omschrijving
         ------------
-                
+        Functie die een rooster maakt met willekeurige nullen en eenen, waarbij nullen een kans van 0.8 hebben en eenen een kans van 0.2 hebben om te ontstaan.
+        
         Returns
         -------
         rooster : ndarray
@@ -86,7 +97,8 @@ class cellulaire_automata:
         '''
         Omschrijving
         ------------
-                
+        Functie die een beschrijving geeft bij de verschillende self-objecten.
+        
         Returns
         -------
         str
@@ -97,16 +109,28 @@ class cellulaire_automata:
 
 class een_dimensionaal(cellulaire_automata):
     '''
+    Omschrijving
+    ------------
+    Een klasse om een een-dimensionale CA te evolueren en grafisch weer te geven.
     
+    Parameters
+    ----------
+    hoogte: int
+        De hoogte van het rooster.
+    breedte: int
+        De breedte van het rooster.
+    begin: list
+        De beginsituatie van de een-dimensionale CA.
+    lijst0 : list
+        Lijst van lijsten van alle combinaties van drie getallen, bestaand uit een of nul, die naar nul gaan na evolutie. 
+    lijst1 : list
+        Lijst van lijsten van alle combinaties van drie getallen, bestaand uit een of nul, die naar een gaan na evolutie.
     
     
     '''
     
     def __init__(self, hoogte, breedte, begin, lijst0, lijst1):
         '''
-        Omschrijving
-        ------------
-        
         Parameters
         ----------
         hoogte : int
@@ -135,6 +159,9 @@ class een_dimensionaal(cellulaire_automata):
         '''
         Omschrijving
         ------------
+        Functie die de buren bepaalt van iedere cel van een een-dimensionale CA en deze vervolgens in een lijst zet. 
+        Deze lijst wordt vervolgens gestopt in de functie evolueren(). Dan komt er een getal uit die vervolgens toegevoed wordt aan lijst. 
+        Dit is uiteindelijke de lijst met getallen van de nieuwe rij.
         
         Parameters
         ----------
@@ -143,9 +170,9 @@ class een_dimensionaal(cellulaire_automata):
 
         Returns
         -------
-        lijst : TYPE
-            DESCRIPTION.
-
+        lijst : list
+            Lijst van nullen en eenen die verkregen zijn door de lijsten met buren in de functie evolueren te stoppen.
+            Deze lijst is de nieuwe rij van de CA.
         '''
         burenlijst = []
         rooster = super().maak_rooster(begin)
@@ -162,7 +189,7 @@ class een_dimensionaal(cellulaire_automata):
         '''
         Omschrijving
         ------------
-        
+        Functie om een cel te evolueren met behulp van de buren van deze cel.
         Parameters
         ----------
         burenlijst : list
@@ -187,6 +214,7 @@ class een_dimensionaal(cellulaire_automata):
         Omschrijving
         ------------
         Plot de lijst van lijsten, die de kolommen van het rooster zijn.
+        
         '''
         plt.figure(figsize=(10,6))
         plt.imshow(self.buren(self.begin), cmap='hot')
@@ -195,6 +223,7 @@ class een_dimensionaal(cellulaire_automata):
         '''
         Omschrijving
         ------------
+        Functie om een object in een_dimensionaal als rooster te printen.
         
         Returns
         -------
@@ -208,6 +237,7 @@ class een_dimensionaal(cellulaire_automata):
         '''
         Omschrijving
         ------------
+        Functie die een beschrijving geeft bij de verschillende self-objecten en het lijst0- en lijst1-object.
                 
         Returns
         -------
@@ -220,20 +250,26 @@ class een_dimensionaal(cellulaire_automata):
     
 class twee_dimensionaal(cellulaire_automata):
     '''
+    Omschrijving
+    ------------
+    Een klasse om een twee-dimensionale CA te evolueren en grafisch weer te geven.
     
+    Parameters
+    ----------
+    hoogte : int
+        De hoogte van het rooster.
+    breedte : int
+        De breedte van het rooster.
     
     '''
     def __init__(self, hoogte, breedte):
         '''
-        Omschrijving
-        ------------
-        
         Parameters
         ----------
-        hoogte : TYPE
-            DESCRIPTION.
-        breedte : TYPE
-            DESCRIPTION.
+        hoogte : int
+            De hoogte van het rooster.
+        breedte : int
+            De breedte van het rooster.
 
         Returns
         -------
@@ -247,11 +283,12 @@ class twee_dimensionaal(cellulaire_automata):
         '''
         Omschrijving
         ------------
+        Functie om een object in twee_dimensionaal weer te geven als geëvolueerd rooster.
         
         Returns
         -------
-        TYPE
-            DESCRIPTION.
+        str
+            Returns een geëvolueerd rooster.
 
         '''
         return str(self.evolueer(super().maak_willekeurig_rooster()))
@@ -260,16 +297,16 @@ class twee_dimensionaal(cellulaire_automata):
         '''
         Omschrijving
         ------------
-
+        Functie om de buren van een cel te bepalen. hier vervolgens een waarde uit te bepalen en deze waarde gebruiken om de cel te evolueren.
         Parameters
         ----------
-        rooster : TYPE
-            DESCRIPTION.
+        rooster : list
+            Een lijst van lijsten van nullen en eenen.
 
         Returns
         -------
-        nieuw_rooster : TYPE
-            DESCRIPTION.
+        nieuw_rooster : list
+            Een lijst van het nieuwe rooster.
 
         '''
         nieuw_rooster = rooster.copy()
