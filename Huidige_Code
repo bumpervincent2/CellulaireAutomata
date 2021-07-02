@@ -203,9 +203,9 @@ class een_dimensionaal(cellulaire_automata):
         '''
         regel = []
         for lijst in burenlijst:
-            if lijst in self.lijst_0:
+            if lijst in self.lijst0:
                 regel.append(0)
-            elif lijst in self.lijst_1:
+            elif lijst in self.lijst1:
                 regel.append(1)
         return regel
     
@@ -262,7 +262,7 @@ class twee_dimensionaal(cellulaire_automata):
         De breedte van het rooster.
     
     '''
-    def __init__(self, hoogte, breedte):
+    def __init__(self, hoogte, breedte, aantal_updates):
         '''
         Parameters
         ----------
@@ -270,6 +270,8 @@ class twee_dimensionaal(cellulaire_automata):
             De hoogte van het rooster.
         breedte : int
             De breedte van het rooster.
+        aantal_updates: int
+            Aantal keer dat het rooster wordt geevolueerd
 
         Returns
         -------
@@ -278,6 +280,7 @@ class twee_dimensionaal(cellulaire_automata):
         '''
         self.hoogte = hoogte
         self.breedte = breedte
+        self.aantal_updates = aantal_updates
         
     def __str__(self):
         '''
@@ -291,9 +294,9 @@ class twee_dimensionaal(cellulaire_automata):
             Returns een geëvolueerd rooster.
 
         '''
-        return str(self.evolueer(super().maak_willekeurig_rooster()))
+        return str(self.evolueer(super().maak_willekeurig_rooster(), self.aantal_updates))
     
-    def evolueer(self, rooster):
+    def evolueer(self, rooster, aantal_updates):
         '''
         Omschrijving
         ------------
@@ -310,7 +313,9 @@ class twee_dimensionaal(cellulaire_automata):
 
         '''
         nieuw_rooster = rooster.copy()
-        for i in range(self.hoogte):
+        teller = 0
+        while teller < aantal_updates:
+            for i in range(self.hoogte):
                 for j in range(self.breedte):
                     som = int(rooster[(i-1)%self.hoogte][(j-1)%self.breedte] + rooster[(i-1)%self.hoogte][j] +
                                    rooster[(i-1)%self.hoogte][(j+1)%self.breedte] + rooster[i][(j+1)%self.breedte] +
@@ -322,25 +327,13 @@ class twee_dimensionaal(cellulaire_automata):
                     else:
                         if som == 3:
                             nieuw_rooster[i][j] = 1
-        rooster[:] = nieuw_rooster[:]
+            if teller != aantal_updates -1:
+                print(nieuw_rooster)
+            teller+=1
+            rooster[:] = nieuw_rooster[:]
         return nieuw_rooster
-            
-
-    def grafisch(self):
-        '''
-        Omschrijving
-        ------------
-        
-        Returns
-        -------
-        None.
-
-        '''
-        plt.imshow(self.evolueer(super().maak_willekeurig_rooster()), cmap='hot')
-        animation_1 = animation.FuncAnimation(plt.gcf(),self.evolueer(super().maak_willekeurig_rooster()),interval=100)
-        plt.plot()
 
  
-b = twee_dimensionaal(50, 50)
+b = twee_dimensionaal(9, 9, 5)
 a = een_dimensionaal(20, 60, [0,1,0], [[1, 1, 1], [1, 1, 0], [1, 0, 1], [0, 0, 0]], [[1, 0, 0], [0, 1, 1], [0, 1, 0], [0, 0, 1]])
-b.grafisch()
+a.grafisch()
